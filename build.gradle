@@ -1,0 +1,71 @@
+plugins {
+    id 'java'
+    id 'application'
+}
+
+group = 'com.niliusjulius'
+version = '0.0.1'
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    testImplementation platform('org.junit:junit-bom:5.10.0')
+    testImplementation 'org.junit.jupiter:junit-jupiter'
+}
+
+test {
+    useJUnitPlatform()
+}
+
+java {
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(21)
+    }
+}
+
+def aocMainClassName = 'com.niliusjulius.aoc.main.App'
+
+application {
+    mainClass = aocMainClassName
+}
+
+jar {
+    manifest {
+        attributes 'Main-Class': aocMainClassName
+    }
+}
+
+for (int i = 0; i < 25; ++i) {
+    String d = String.format('%02d', (i + 1))
+    tasks.register("day$d", JavaExec) {
+        classpath = sourceSets.main.runtimeClasspath
+        mainClass = "com.niliusjulius.aoc.days.Day${d}"
+        group = 'AoC day'
+        description = "Execute Day$d"
+    }
+}
+
+tasks.register("downloadInputs", JavaExec) {
+    doFirst {
+        if (!System.getenv('AOC_SESSION_ID')) {
+            System.err.println('Download will not work as AOC_SESSION_ID environment variable is not set')
+        }
+        if (!System.getenv('AOC_YEAR')) {
+            System.err.println('Download will not work as AOC_YEAR environment variable is not set')
+        }
+    }
+    classpath = sourceSets.main.runtimeClasspath
+    mainClass = aocMainClassName
+    args 'download'
+    group = 'AoC util'
+    description = "download inputs if you have AOC_SESSION_ID environment variable set correctly"
+}
+
+tasks.register("runAllDays", JavaExec) {
+    classpath = sourceSets.main.runtimeClasspath
+    mainClass = aocMainClassName
+    group = 'AoC util'
+    description = "run all days back to back"
+}
