@@ -1,11 +1,13 @@
 # Java starter for advent of code
 
 A simple java starter which can be used for the Advent of Code https://adventofcode.com/
-Based on code from Zebalu https://github.com/zebalu/advent-of-code-2023
+Based on setup code from Zebalu https://github.com/zebalu/advent-of-code-2023
 
 ## How to use
 
 ### Setup
+
+Make sure the resources folder exists (under src/main/). This will be used to store all inputs.
 
 In order to be able to use the automatic input download, you will need to set up 2 environment variables:
 
@@ -22,6 +24,7 @@ you will see a Cookie header. In this header you will see a value set for the 's
 Multiple gradle tasks will be generated. Under 'aoc util' you will find a task to download all inputs. Run this every
 day to get the latest input, and a task to run all days which have been added to App.java. When running all days, it
 will also time the runtime of every part. Every time you call `System.out.println()` it will start the timer of a
+new part. Every time you call `System.out.println()` it will start the timer of a
 new part.
 
 Under 'aoc day' you will find a task to run each day individually.
