@@ -11,6 +11,15 @@ import java.util.Objects;
 
 public class Reader {
 
+    public static String readLineAsString(String fileName) {
+        try (BufferedReader br = new BufferedReader(
+                new InputStreamReader(Objects.requireNonNull(Day01.class.getResourceAsStream("/" + fileName + ".txt")), StandardCharsets.UTF_8))) {
+            return br.readLine();
+        } catch (IOException e) {
+            throw new IllegalStateException(e);
+        }
+    }
+
     public static List<String> readLinesAsList(String fileName) {
         try (BufferedReader br = new BufferedReader(
                 new InputStreamReader(Objects.requireNonNull(Day01.class.getResourceAsStream("/" + fileName + ".txt")), StandardCharsets.UTF_8))) {
