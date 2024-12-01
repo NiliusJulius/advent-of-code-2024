@@ -26,7 +26,7 @@ public class App {
             new Downloader(sessionId).downloadInputs(year);
         } else {
             Instant start = Instant.now();
-            exec(new DisplayData(1, "Day 1 example", Day01::main));
+            exec(new DisplayData(1, "Historian Hysteria", Day01::main));
             Instant end = Instant.now();
             System.out.println("so far:\t" + Duration.between(start, end).toMillis() + " ms...");
         }
