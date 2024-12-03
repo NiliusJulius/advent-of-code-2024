@@ -28,4 +28,18 @@ public class Reader {
             throw new IllegalStateException(e);
         }
     }
+
+    public static String readWholeFileAsString(String fileName) {
+        try (BufferedReader br = new BufferedReader(
+                new InputStreamReader(Objects.requireNonNull(Day01.class.getResourceAsStream("/" + fileName + ".txt")), StandardCharsets.UTF_8))) {
+            StringBuilder sb = new StringBuilder();
+            String line;
+            while ((line = br.readLine()) != null) {
+                sb.append(line);
+            }
+            return sb.toString();
+        } catch (IOException e) {
+            throw new IllegalStateException(e);
+        }
+    }
 }

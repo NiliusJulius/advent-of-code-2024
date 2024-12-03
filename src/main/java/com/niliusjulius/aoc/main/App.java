@@ -2,6 +2,7 @@ package com.niliusjulius.aoc.main;
 
 import com.niliusjulius.aoc.days.Day01;
 import com.niliusjulius.aoc.days.Day02;
+import com.niliusjulius.aoc.days.Day03;
 import com.niliusjulius.aoc.util.Downloader;
 
 import java.io.OutputStream;
@@ -29,6 +30,7 @@ public class App {
             Instant start = Instant.now();
             exec(new DisplayData(1, "Historian Hysteria", Day01::main));
             exec(new DisplayData(1, "Red-Nosed Reports", Day02::main));
+            exec(new DisplayData(1, "Mull It Over", Day03::main));
             Instant end = Instant.now();
             System.out.println("so far:\t" + Duration.between(start, end).toMillis() + " ms...");
         }
