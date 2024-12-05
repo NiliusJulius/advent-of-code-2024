@@ -2,7 +2,10 @@ package com.niliusjulius.aoc.days;
 
 import com.niliusjulius.aoc.util.Reader;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public class Day05 {
 
@@ -16,13 +19,11 @@ public class Day05 {
                 if (ordering.containsKey(Integer.parseInt(parts[0]))) {
                     ordering.get(Integer.parseInt(parts[0])).add(Integer.parseInt(parts[1]));
                 } else {
-//                    List<Integer> list = new ArrayList<>(Integer.parseInt(parts[1]));
-                    List<Integer> list = new ArrayList<>();
-                    list.add(Integer.parseInt(parts[1]));
+                    List<Integer> list = new ArrayList<>(List.of(Integer.parseInt(parts[1])));
                     ordering.put(Integer.parseInt(parts[0]), list);
                 }
             } else if (line.contains(",")) {
-                List<Integer> pages = new LinkedList<>();
+                List<Integer> pages = new ArrayList<>();
                 for (String part : line.split(",")) {
                     pages.add(Integer.parseInt(part));
                 }
@@ -37,74 +38,61 @@ public class Day05 {
     private static int part1(Map<Integer, List<Integer>> ordering, List<List<Integer>> updates) {
         int middleNumbers = 0;
         for (List<Integer> pages : updates) {
-            boolean correctOrder = true;
-            List<Integer> includedPages = new ArrayList<>();
-            for (Integer page : pages) {
-                if (ordering.containsKey(page)) {
-                    for (Integer laterPage : ordering.get(page)) {
-                        if (includedPages.contains(laterPage)) {
-                            correctOrder = false;
-                            break;
-                        }
-                    }
-                }
-                includedPages.add(page);
-            }
-            if (correctOrder) {
+            if (isCorrectlyOrdered(ordering, pages)) {
                 middleNumbers+= pages.get(pages.size() / 2);
             }
         }
-
         return middleNumbers;
+    }
+
+    private static boolean isCorrectlyOrdered(Map<Integer, List<Integer>> ordering, List<Integer> pages) {
+        boolean correctOrder = true;
+        List<Integer> alreadySeenPages = new ArrayList<>();
+        for (Integer page : pages) {
+            if (ordering.containsKey(page)) {
+                for (Integer laterPage : ordering.get(page)) {
+                    if (alreadySeenPages.contains(laterPage)) {
+                        correctOrder = false;
+                        break;
+                    }
+                }
+            }
+            alreadySeenPages.add(page);
+        }
+        return correctOrder;
     }
 
     private static int part2(Map<Integer, List<Integer>> ordering, List<List<Integer>> updates) {
         int middleNumbers = 0;
-        List<List<Integer>> incorrectPages = new ArrayList<>();
+        List<List<Integer>> incorrectUpdates = new ArrayList<>();
         for (List<Integer> pages : updates) {
-            boolean correctOrder = true;
-            List<Integer> includedPages = new ArrayList<>();
-            for (Integer page : pages) {
-                if (ordering.containsKey(page)) {
-                    for (Integer laterPage : ordering.get(page)) {
-                        if (includedPages.contains(laterPage)) {
-                            correctOrder = false;
-                            break;
-                        }
-                    }
-                }
-                includedPages.add(page);
-            }
-            if (!correctOrder) {
-                incorrectPages.add(pages);
+            if (!isCorrectlyOrdered(ordering, pages)) {
+                incorrectUpdates.add(pages);
             }
         }
 
-        for (List<Integer> pages : incorrectPages) {
+        for (List<Integer> pages : incorrectUpdates) {
             List<Integer> correct = testPages(ordering, pages);
             middleNumbers+= correct.get(pages.size() / 2);
         }
-
         return middleNumbers;
     }
 
     private static List<Integer> testPages(Map<Integer, List<Integer>> ordering, List<Integer> pages) {
-        List<Integer> includedPages = new ArrayList<>();
+        List<Integer> alreadySeenPages = new ArrayList<>();
         for (int i = 0; i < pages.size(); i++) {
             Integer page = pages.get(i);
             if (ordering.containsKey(page)) {
                 for (Integer laterPage : ordering.get(page)) {
-                    if (includedPages.contains(laterPage)) {
-//                        for (int j = 0; j < includedPages.indexOf(laterPage); j++) {
+                    if (alreadySeenPages.contains(laterPage)) {
                         int pageNumber = pages.get(i);
                         pages.remove(i);
-                        pages.add(includedPages.indexOf(laterPage), pageNumber);
+                        pages.add(alreadySeenPages.indexOf(laterPage), pageNumber);
                         return testPages(ordering, pages);
-//                        }
                     }
                 }
             }
-            includedPages.add(page);
+            alreadySeenPages.add(page);
         }
         return pages;
     }
