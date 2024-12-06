@@ -27,10 +27,11 @@ public class App {
         } else {
             Instant start = Instant.now();
             exec(new DisplayData(1, "Historian Hysteria", Day01::main));
-            exec(new DisplayData(1, "Red-Nosed Reports", Day02::main));
-            exec(new DisplayData(1, "Mull It Over", Day03::main));
-            exec(new DisplayData(1, "Ceres Search", Day04::main));
-            exec(new DisplayData(1, "Print Queue", Day05::main));
+            exec(new DisplayData(2, "Red-Nosed Reports", Day02::main));
+            exec(new DisplayData(3, "Mull It Over", Day03::main));
+            exec(new DisplayData(4, "Ceres Search", Day04::main));
+            exec(new DisplayData(5, "Print Queue", Day05::main));
+            exec(new DisplayData(6, "Guard Gallivant", Day06::main));
             Instant end = Instant.now();
             System.out.println("so far:\t" + Duration.between(start, end).toMillis() + " ms...");
         }
