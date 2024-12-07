@@ -1,15 +1,11 @@
 package com.niliusjulius.aoc.days;
 
 import com.niliusjulius.aoc.util.Reader;
+import com.niliusjulius.aoc.util.traverse2d.Direction;
 
 import java.util.List;
 
 public class Day04 {
-
-    enum Direction {
-        LEFT, RIGHT, UP, DOWN,
-        LEFT_UP, RIGHT_UP, LEFT_DOWN, RIGHT_DOWN
-    }
 
     public static void main(String[] args) {
         List<String> input = Reader.readLinesAsList("day04");
