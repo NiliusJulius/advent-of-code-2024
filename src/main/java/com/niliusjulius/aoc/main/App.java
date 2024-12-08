@@ -33,6 +33,7 @@ public class App {
             exec(new DisplayData(5, "Print Queue", Day05::main));
             exec(new DisplayData(6, "Guard Gallivant", Day06::main));
             exec(new DisplayData(7, "Bridge Repair", Day07::main));
+            exec(new DisplayData(8, "Resonant Collinearity", Day08::main));
             Instant end = Instant.now();
             System.out.println("so far:\t" + Duration.between(start, end).toMillis() + " ms...");
         }

@@ -15,6 +15,10 @@ public class Coordinate {
         return new Coordinate(this.x + direction.coordinate.x, this.y + direction.coordinate.y);
     }
 
+    public boolean inBounds(int xMin, int xMax, int yMin, int yMax) {
+        return x >= xMin && x <= xMax && y >= yMin && y <= yMax;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (!(o instanceof Coordinate)) return false;
