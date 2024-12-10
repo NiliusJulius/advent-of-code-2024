@@ -35,6 +35,7 @@ public class App {
             exec(new DisplayData(7, "Bridge Repair", Day07::main));
             exec(new DisplayData(8, "Resonant Collinearity", Day08::main));
             exec(new DisplayData(9, "Disk Fragmenter", Day09::main));
+            exec(new DisplayData(10, "Disk Fragmenter", Day10::main));
             Instant end = Instant.now();
             System.out.println("so far:\t" + Duration.between(start, end).toMillis() + " ms...");
         }
