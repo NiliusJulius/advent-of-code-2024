@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Grid<T> {
-    private T[][] grid;
+    private final T[][] grid;
 
     public Grid(T[][] grid) {
         this.grid = grid;
@@ -23,19 +23,18 @@ public class Grid<T> {
     }
 
     public Coordinate indexOf(Object o) {
-        T[][] a = this.grid;
         if (o == null) {
-            for (int i = 0; i < a.length; i++) {
-                for (int j = 0; j < a[i].length; j++) {
-                    if (a[i][j] == null) {
+            for (int i = 0; i < grid.length; i++) {
+                for (int j = 0; j < grid[i].length; j++) {
+                    if (grid[i][j] == null) {
                         return new Coordinate(i, j);
                     }
                 }
             }
         } else {
-            for (int i = 0; i < a.length; i++) {
-                for (int j = 0; j < a[i].length; j++) {
-                    if (o.equals(a[i][j])) {
+            for (int i = 0; i < grid.length; i++) {
+                for (int j = 0; j < grid[i].length; j++) {
+                    if (o.equals(grid[i][j])) {
                         return new Coordinate(i, j);
                     }
                 }
@@ -45,11 +44,10 @@ public class Grid<T> {
     }
 
     public Coordinate indexOf(Object... o) {
-        T[][] a = this.grid;
-        for (int i = 0; i < a.length; i++) {
-            for (int j = 0; j < a[i].length; j++) {
+        for (int i = 0; i < grid.length; i++) {
+            for (int j = 0; j < grid[i].length; j++) {
                 for (Object obj : o) {
-                    if (obj.equals(a[i][j])) {
+                    if (obj.equals(grid[i][j])) {
                         return new Coordinate(i, j);
                     }
                 }
@@ -59,11 +57,10 @@ public class Grid<T> {
     }
 
     public List<Coordinate> findAll(Object o) {
-        T[][] a = this.grid;
         List<Coordinate> result = new ArrayList<>();
-        for (int i = 0; i < a.length; i++) {
-            for (int j = 0; j < a[i].length; j++) {
-                if (o.equals(a[i][j])) {
+        for (int i = 0; i < grid.length; i++) {
+            for (int j = 0; j < grid[i].length; j++) {
+                if (o.equals(grid[i][j])) {
                     result.add(new Coordinate(i, j));
                 }
             }
@@ -72,20 +69,36 @@ public class Grid<T> {
     }
 
     public List<Coordinate> findAdjacent(Coordinate coordinate, Object o) {
-        T[][] a = this.grid;
         List<Coordinate> result = new ArrayList<>();
-        if (withinGrid(new Coordinate(coordinate.x+Direction.UP.coordinate.x, coordinate.y+Direction.UP.coordinate.y)) && a[coordinate.x+Direction.UP.coordinate.x][coordinate.y+Direction.UP.coordinate.y] == o) {
+        if (withinGrid(new Coordinate(coordinate.x+Direction.UP.coordinate.x, coordinate.y+Direction.UP.coordinate.y))
+                && grid[coordinate.x+Direction.UP.coordinate.x][coordinate.y+Direction.UP.coordinate.y] == o) {
             result.add(new Coordinate(coordinate.x+Direction.UP.coordinate.x, coordinate.y+Direction.UP.coordinate.y));
         }
-        if (withinGrid(new Coordinate(coordinate.x+Direction.RIGHT.coordinate.x, coordinate.y+Direction.RIGHT.coordinate.y)) && a[coordinate.x+Direction.RIGHT.coordinate.x][coordinate.y+Direction.RIGHT.coordinate.y] == o) {
+        if (withinGrid(new Coordinate(coordinate.x+Direction.RIGHT.coordinate.x, coordinate.y+Direction.RIGHT.coordinate.y))
+                && grid[coordinate.x+Direction.RIGHT.coordinate.x][coordinate.y+Direction.RIGHT.coordinate.y] == o) {
             result.add(new Coordinate(coordinate.x+Direction.RIGHT.coordinate.x, coordinate.y+Direction.RIGHT.coordinate.y));
         }
-        if (withinGrid(new Coordinate(coordinate.x+Direction.DOWN.coordinate.x, coordinate.y+Direction.DOWN.coordinate.y)) && a[coordinate.x+Direction.DOWN.coordinate.x][coordinate.y+Direction.DOWN.coordinate.y] == o) {
+        if (withinGrid(new Coordinate(coordinate.x+Direction.DOWN.coordinate.x, coordinate.y+Direction.DOWN.coordinate.y))
+                && grid[coordinate.x+Direction.DOWN.coordinate.x][coordinate.y+Direction.DOWN.coordinate.y] == o) {
             result.add(new Coordinate(coordinate.x+Direction.DOWN.coordinate.x, coordinate.y+Direction.DOWN.coordinate.y));
         }
-        if (withinGrid(new Coordinate(coordinate.x+Direction.LEFT.coordinate.x, coordinate.y+Direction.LEFT.coordinate.y)) && a[coordinate.x+Direction.LEFT.coordinate.x][coordinate.y+Direction.LEFT.coordinate.y] == o) {
+        if (withinGrid(new Coordinate(coordinate.x+Direction.LEFT.coordinate.x, coordinate.y+Direction.LEFT.coordinate.y))
+                && grid[coordinate.x+Direction.LEFT.coordinate.x][coordinate.y+Direction.LEFT.coordinate.y] == o) {
             result.add(new Coordinate(coordinate.x+Direction.LEFT.coordinate.x, coordinate.y+Direction.LEFT.coordinate.y));
         }
         return result;
+    }
+
+    public void print() {
+        for (T[] row : grid) {
+            for (T field : row) {
+                if (field != null) {
+                    System.out.print(field);
+                } else {
+                    System.out.print(" ");
+                }
+            }
+            System.out.println();
+        }
     }
 }
