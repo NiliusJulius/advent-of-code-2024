@@ -3,6 +3,8 @@ package com.niliusjulius.aoc.util.traverse2d;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.niliusjulius.aoc.util.traverse2d.Direction.*;
+
 public class Grid<T> {
     private final T[][] grid;
 
@@ -17,14 +19,22 @@ public class Grid<T> {
     public T get(Coordinate coordinate) {
         return grid[coordinate.x][coordinate.y];
     }
+    
+    public T getValueInDirection(Coordinate coordinate, Direction direction) {
+        return grid[coordinate.x+direction.coordinate.x][coordinate.y+direction.coordinate.y];
+    }
 
     public void set(Coordinate coordinate, T value) {
         grid[coordinate.x][coordinate.y] = value;
     }
 
-    public int height() { return grid.length; }
+    public int height() { 
+        return grid.length; 
+    }
 
-    public int length() { return grid[0].length; }
+    public int length() { 
+        return grid[0].length; 
+    }
 
     public Coordinate indexOf(Object o) {
         if (o == null) {
@@ -74,42 +84,50 @@ public class Grid<T> {
 
     public List<Coordinate> findAdjacent(Coordinate coordinate, Object o) {
         List<Coordinate> result = new ArrayList<>();
-        if (withinGrid(new Coordinate(coordinate.x+Direction.UP.coordinate.x, coordinate.y+Direction.UP.coordinate.y))
-                && grid[coordinate.x+Direction.UP.coordinate.x][coordinate.y+Direction.UP.coordinate.y].equals(o)) {
-            result.add(new Coordinate(coordinate.x+Direction.UP.coordinate.x, coordinate.y+Direction.UP.coordinate.y));
+        Coordinate nextCoordinate = coordinate.nextCoordinate(UP);
+        if (withinGrid(nextCoordinate)
+                && getValueInDirection(coordinate, UP).equals(o)) {
+            result.add(nextCoordinate);
         }
-        if (withinGrid(new Coordinate(coordinate.x+Direction.RIGHT.coordinate.x, coordinate.y+Direction.RIGHT.coordinate.y))
-                && grid[coordinate.x+Direction.RIGHT.coordinate.x][coordinate.y+Direction.RIGHT.coordinate.y].equals(o)) {
-            result.add(new Coordinate(coordinate.x+Direction.RIGHT.coordinate.x, coordinate.y+Direction.RIGHT.coordinate.y));
+        nextCoordinate = coordinate.nextCoordinate(RIGHT);
+        if (withinGrid(nextCoordinate)
+                && getValueInDirection(coordinate, RIGHT).equals(o)) {
+            result.add(nextCoordinate);
         }
-        if (withinGrid(new Coordinate(coordinate.x+Direction.DOWN.coordinate.x, coordinate.y+Direction.DOWN.coordinate.y))
-                && grid[coordinate.x+Direction.DOWN.coordinate.x][coordinate.y+Direction.DOWN.coordinate.y].equals(o)) {
-            result.add(new Coordinate(coordinate.x+Direction.DOWN.coordinate.x, coordinate.y+Direction.DOWN.coordinate.y));
+        nextCoordinate = coordinate.nextCoordinate(DOWN);
+        if (withinGrid(nextCoordinate)
+                && getValueInDirection(coordinate, DOWN).equals(o)) {
+            result.add(nextCoordinate);
         }
-        if (withinGrid(new Coordinate(coordinate.x+Direction.LEFT.coordinate.x, coordinate.y+Direction.LEFT.coordinate.y))
-                && grid[coordinate.x+Direction.LEFT.coordinate.x][coordinate.y+Direction.LEFT.coordinate.y].equals(o)) {
-            result.add(new Coordinate(coordinate.x+Direction.LEFT.coordinate.x, coordinate.y+Direction.LEFT.coordinate.y));
+        nextCoordinate = coordinate.nextCoordinate(LEFT);
+        if (withinGrid(nextCoordinate)
+                && getValueInDirection(coordinate, LEFT).equals(o)) {
+            result.add(nextCoordinate);
         }
         return result;
     }
 
     public List<Coordinate> findNotAdjacent(Coordinate coordinate, Object o) {
         List<Coordinate> result = new ArrayList<>();
-        if (!withinGrid(new Coordinate(coordinate.x+Direction.UP.coordinate.x, coordinate.y+Direction.UP.coordinate.y))
-                || !grid[coordinate.x+Direction.UP.coordinate.x][coordinate.y+Direction.UP.coordinate.y].equals(o)) {
-            result.add(new Coordinate(coordinate.x+Direction.UP.coordinate.x, coordinate.y+Direction.UP.coordinate.y));
+        Coordinate nextCoordinate = coordinate.nextCoordinate(UP);
+        if (!withinGrid(nextCoordinate)
+                || !getValueInDirection(coordinate,UP).equals(o)) {
+            result.add(nextCoordinate);
         }
-        if (!withinGrid(new Coordinate(coordinate.x+Direction.RIGHT.coordinate.x, coordinate.y+Direction.RIGHT.coordinate.y))
-                || !grid[coordinate.x+Direction.RIGHT.coordinate.x][coordinate.y+Direction.RIGHT.coordinate.y].equals(o)) {
-            result.add(new Coordinate(coordinate.x+Direction.RIGHT.coordinate.x, coordinate.y+Direction.RIGHT.coordinate.y));
+        nextCoordinate = coordinate.nextCoordinate(RIGHT);
+        if (!withinGrid(nextCoordinate)
+                || !getValueInDirection(coordinate, RIGHT).equals(o)) {
+            result.add(nextCoordinate);
         }
-        if (!withinGrid(new Coordinate(coordinate.x+Direction.DOWN.coordinate.x, coordinate.y+Direction.DOWN.coordinate.y))
-                || !grid[coordinate.x+Direction.DOWN.coordinate.x][coordinate.y+Direction.DOWN.coordinate.y].equals(o)) {
-            result.add(new Coordinate(coordinate.x+Direction.DOWN.coordinate.x, coordinate.y+Direction.DOWN.coordinate.y));
+        nextCoordinate = coordinate.nextCoordinate(DOWN);
+        if (!withinGrid(nextCoordinate)
+                || !getValueInDirection(coordinate, DOWN).equals(o)) {
+            result.add(nextCoordinate);
         }
-        if (!withinGrid(new Coordinate(coordinate.x+Direction.LEFT.coordinate.x, coordinate.y+Direction.LEFT.coordinate.y))
-                || !grid[coordinate.x+Direction.LEFT.coordinate.x][coordinate.y+Direction.LEFT.coordinate.y].equals(o)) {
-            result.add(new Coordinate(coordinate.x+Direction.LEFT.coordinate.x, coordinate.y+Direction.LEFT.coordinate.y));
+        nextCoordinate = coordinate.nextCoordinate(LEFT);
+        if (!withinGrid(nextCoordinate)
+                || !getValueInDirection(coordinate, LEFT).equals(o)) {
+            result.add(nextCoordinate);
         }
         return result;
     }
@@ -134,60 +152,80 @@ public class Grid<T> {
     public int countCoordinateCorners(Coordinate coordinate) {
         int cornerCount = 0;
         T regionValue = grid[coordinate.x][coordinate.y];
-        if ((!withinGrid(new Coordinate(coordinate.x+Direction.UP.coordinate.x, coordinate.y+Direction.UP.coordinate.y))
-                || !grid[coordinate.x+Direction.UP.coordinate.x][coordinate.y+Direction.UP.coordinate.y].equals(regionValue))
-                && (!withinGrid(new Coordinate(coordinate.x+Direction.RIGHT.coordinate.x, coordinate.y+Direction.RIGHT.coordinate.y))
-                || !grid[coordinate.x+Direction.RIGHT.coordinate.x][coordinate.y+Direction.RIGHT.coordinate.y].equals(regionValue))) {
+        Coordinate nextCoordinate = coordinate.nextCoordinate(UP);
+        Coordinate nextCoordinate2 = coordinate.nextCoordinate(RIGHT);
+        if ((!withinGrid(nextCoordinate)
+                || !getValueInDirection(coordinate, UP).equals(regionValue))
+                && (!withinGrid(nextCoordinate2)
+                || !getValueInDirection(coordinate, RIGHT).equals(regionValue))) {
             cornerCount++;
         }
-        if ((!withinGrid(new Coordinate(coordinate.x+Direction.DOWN.coordinate.x, coordinate.y+Direction.DOWN.coordinate.y))
-                || !grid[coordinate.x+Direction.DOWN.coordinate.x][coordinate.y+Direction.DOWN.coordinate.y].equals(regionValue))
-                && (!withinGrid(new Coordinate(coordinate.x+Direction.RIGHT.coordinate.x, coordinate.y+Direction.RIGHT.coordinate.y))
-                || !grid[coordinate.x+Direction.RIGHT.coordinate.x][coordinate.y+Direction.RIGHT.coordinate.y].equals(regionValue))) {
+        nextCoordinate = coordinate.nextCoordinate(DOWN);
+        nextCoordinate2 = coordinate.nextCoordinate(RIGHT);
+        if ((!withinGrid(nextCoordinate)
+                || !getValueInDirection(coordinate, DOWN).equals(regionValue))
+                && (!withinGrid(nextCoordinate2)
+                || !getValueInDirection(coordinate, RIGHT).equals(regionValue))) {
             cornerCount++;
         }
-        if ((!withinGrid(new Coordinate(coordinate.x+Direction.DOWN.coordinate.x, coordinate.y+Direction.DOWN.coordinate.y))
-                || !grid[coordinate.x+Direction.DOWN.coordinate.x][coordinate.y+Direction.DOWN.coordinate.y].equals(regionValue))
-                && (!withinGrid(new Coordinate(coordinate.x+Direction.LEFT.coordinate.x, coordinate.y+Direction.LEFT.coordinate.y))
-                || !grid[coordinate.x+Direction.LEFT.coordinate.x][coordinate.y+Direction.LEFT.coordinate.y].equals(regionValue))) {
+        nextCoordinate = coordinate.nextCoordinate(DOWN);
+        nextCoordinate2 = coordinate.nextCoordinate(LEFT);
+        if ((!withinGrid(nextCoordinate)
+                || !getValueInDirection(coordinate, DOWN).equals(regionValue))
+                && (!withinGrid(nextCoordinate2)
+                || !getValueInDirection(coordinate, LEFT).equals(regionValue))) {
             cornerCount++;
         }
-        if ((!withinGrid(new Coordinate(coordinate.x+Direction.UP.coordinate.x, coordinate.y+Direction.UP.coordinate.y))
-                || !grid[coordinate.x+Direction.UP.coordinate.x][coordinate.y+Direction.UP.coordinate.y].equals(regionValue))
-                && (!withinGrid(new Coordinate(coordinate.x+Direction.LEFT.coordinate.x, coordinate.y+Direction.LEFT.coordinate.y))
-                || !grid[coordinate.x+Direction.LEFT.coordinate.x][coordinate.y+Direction.LEFT.coordinate.y].equals(regionValue))) {
+        nextCoordinate = coordinate.nextCoordinate(UP);
+        nextCoordinate2 = coordinate.nextCoordinate(LEFT);
+        if ((!withinGrid(nextCoordinate)
+                || !getValueInDirection(coordinate, UP).equals(regionValue))
+                && (!withinGrid(nextCoordinate2)
+                || !getValueInDirection(coordinate, LEFT).equals(regionValue))) {
             cornerCount++;
         }
-        if ((withinGrid(new Coordinate(coordinate.x+Direction.RIGHT_UP.coordinate.x, coordinate.y+Direction.RIGHT_UP.coordinate.y))
-                && !grid[coordinate.x+Direction.RIGHT_UP.coordinate.x][coordinate.y+Direction.RIGHT_UP.coordinate.y].equals(regionValue))
-                && ((withinGrid(new Coordinate(coordinate.x+Direction.UP.coordinate.x, coordinate.y+Direction.UP.coordinate.y))
-                && grid[coordinate.x+Direction.UP.coordinate.x][coordinate.y+Direction.UP.coordinate.y].equals(regionValue)))
-                && ((withinGrid(new Coordinate(coordinate.x+Direction.RIGHT.coordinate.x, coordinate.y+Direction.RIGHT.coordinate.y))
-                && grid[coordinate.x+Direction.RIGHT.coordinate.x][coordinate.y+Direction.RIGHT.coordinate.y].equals(regionValue)))) {
+        nextCoordinate = coordinate.nextCoordinate(RIGHT_UP);
+        nextCoordinate2 = coordinate.nextCoordinate(UP);
+        Coordinate nextCoordinate3 = coordinate.nextCoordinate(RIGHT);
+        if ((withinGrid(nextCoordinate)
+                && !getValueInDirection(coordinate, RIGHT_UP).equals(regionValue))
+                && ((withinGrid(nextCoordinate2)
+                && getValueInDirection(coordinate, UP).equals(regionValue)))
+                && ((withinGrid(nextCoordinate3)
+                && getValueInDirection(coordinate, RIGHT).equals(regionValue)))) {
             cornerCount++;
         }
-        if ((withinGrid(new Coordinate(coordinate.x+Direction.RIGHT_DOWN.coordinate.x, coordinate.y+Direction.RIGHT_DOWN.coordinate.y))
-                && !grid[coordinate.x+Direction.RIGHT_DOWN.coordinate.x][coordinate.y+Direction.RIGHT_DOWN.coordinate.y].equals(regionValue))
-                && ((withinGrid(new Coordinate(coordinate.x+Direction.DOWN.coordinate.x, coordinate.y+Direction.DOWN.coordinate.y))
-                && grid[coordinate.x+Direction.DOWN.coordinate.x][coordinate.y+Direction.DOWN.coordinate.y].equals(regionValue)))
-                && ((withinGrid(new Coordinate(coordinate.x+Direction.RIGHT.coordinate.x, coordinate.y+Direction.RIGHT.coordinate.y))
-                && grid[coordinate.x+Direction.RIGHT.coordinate.x][coordinate.y+Direction.RIGHT.coordinate.y].equals(regionValue)))) {
+        nextCoordinate = coordinate.nextCoordinate(RIGHT_DOWN);
+        nextCoordinate2 = coordinate.nextCoordinate(DOWN);
+        nextCoordinate3 = coordinate.nextCoordinate(RIGHT);
+        if ((withinGrid(nextCoordinate)
+                && !getValueInDirection(coordinate, RIGHT_DOWN).equals(regionValue))
+                && ((withinGrid(nextCoordinate2)
+                && getValueInDirection(coordinate, DOWN).equals(regionValue)))
+                && ((withinGrid(nextCoordinate3)
+                && getValueInDirection(coordinate, RIGHT).equals(regionValue)))) {
             cornerCount++;
         }
-        if ((withinGrid(new Coordinate(coordinate.x+Direction.LEFT_UP.coordinate.x, coordinate.y+Direction.LEFT_UP.coordinate.y))
-                && !grid[coordinate.x+Direction.LEFT_UP.coordinate.x][coordinate.y+Direction.LEFT_UP.coordinate.y].equals(regionValue))
-                && ((withinGrid(new Coordinate(coordinate.x+Direction.UP.coordinate.x, coordinate.y+Direction.UP.coordinate.y))
-                && grid[coordinate.x+Direction.UP.coordinate.x][coordinate.y+Direction.UP.coordinate.y].equals(regionValue)))
-                && ((withinGrid(new Coordinate(coordinate.x+Direction.LEFT.coordinate.x, coordinate.y+Direction.LEFT.coordinate.y))
-                && grid[coordinate.x+Direction.LEFT.coordinate.x][coordinate.y+Direction.LEFT.coordinate.y].equals(regionValue)))) {
+        nextCoordinate = coordinate.nextCoordinate(LEFT_UP);
+        nextCoordinate2 = coordinate.nextCoordinate(UP);
+        nextCoordinate3 = coordinate.nextCoordinate(LEFT);
+        if ((withinGrid(nextCoordinate)
+                && !getValueInDirection(coordinate, LEFT_UP).equals(regionValue))
+                && ((withinGrid(nextCoordinate2)
+                && getValueInDirection(coordinate, UP).equals(regionValue)))
+                && ((withinGrid(nextCoordinate3)
+                && getValueInDirection(coordinate, LEFT).equals(regionValue)))) {
             cornerCount++;
         }
-        if ((withinGrid(new Coordinate(coordinate.x+Direction.LEFT_DOWN.coordinate.x, coordinate.y+Direction.LEFT_DOWN.coordinate.y))
-                && !grid[coordinate.x+Direction.LEFT_DOWN.coordinate.x][coordinate.y+Direction.LEFT_DOWN.coordinate.y].equals(regionValue))
-                && ((withinGrid(new Coordinate(coordinate.x+Direction.DOWN.coordinate.x, coordinate.y+Direction.DOWN.coordinate.y))
-                && grid[coordinate.x+Direction.DOWN.coordinate.x][coordinate.y+Direction.DOWN.coordinate.y].equals(regionValue)))
-                && ((withinGrid(new Coordinate(coordinate.x+Direction.LEFT.coordinate.x, coordinate.y+Direction.LEFT.coordinate.y))
-                && grid[coordinate.x+Direction.LEFT.coordinate.x][coordinate.y+Direction.LEFT.coordinate.y].equals(regionValue)))) {
+        nextCoordinate = coordinate.nextCoordinate(LEFT_DOWN);
+        nextCoordinate2 = coordinate.nextCoordinate(DOWN);
+        nextCoordinate3 = coordinate.nextCoordinate(LEFT);
+        if ((withinGrid(nextCoordinate)
+                && !getValueInDirection(coordinate, LEFT_DOWN).equals(regionValue))
+                && ((withinGrid(nextCoordinate2)
+                && getValueInDirection(coordinate, DOWN).equals(regionValue)))
+                && ((withinGrid(nextCoordinate3)
+                && getValueInDirection(coordinate, LEFT).equals(regionValue)))) {
             cornerCount++;
         }
         return cornerCount;
