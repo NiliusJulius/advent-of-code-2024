@@ -5,6 +5,8 @@ import com.niliusjulius.aoc.util.Downloader;
 
 import java.io.OutputStream;
 import java.io.PrintStream;
+import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.time.Duration;
 import java.time.Instant;
 import java.util.ArrayList;
@@ -53,7 +55,7 @@ public class App {
         titleLine.append(repeat("#", CONSOLE_WIDTH - titleLine.length()));
         System.out.println(titleLine);
         PrintStream save = System.out;
-        MeasuringPrintStream measuringStream = new MeasuringPrintStream(System.out);
+        MeasuringPrintStream measuringStream = new MeasuringPrintStream(System.out, false, StandardCharsets.UTF_8);
         System.setOut(measuringStream);
         try {
             Instant start = Instant.now();
@@ -83,8 +85,8 @@ public class App {
     private static class MeasuringPrintStream extends PrintStream {
         private final List<Instant> times = new ArrayList<>();
 
-        public MeasuringPrintStream(OutputStream out) {
-            super(out);
+        public MeasuringPrintStream(OutputStream out, boolean autoFlush, Charset charset) {
+            super(out, autoFlush, charset);
         }
 
         @Override

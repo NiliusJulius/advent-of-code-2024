@@ -49,7 +49,7 @@ public class Day14 {
         int lowestSafety = 1000000000;
         int lowestSafetyIndex = 0;
 
-        for (int k = 0; k < 10000; k++) {
+        for (int k = 0; k < WIDTH*HEIGHT-1; k++) {
             for (Robot robot : robots) {
                 moveRobot(robot);
             }
@@ -138,7 +138,7 @@ public class Day14 {
         @Override
         public String toString() {
             if (!robots.isEmpty()) {
-                return "#";
+                return "█";
             }
             return ".";
         }

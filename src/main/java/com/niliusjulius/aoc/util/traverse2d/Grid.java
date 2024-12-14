@@ -1,5 +1,7 @@
 package com.niliusjulius.aoc.util.traverse2d;
 
+import java.io.PrintStream;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -236,15 +238,16 @@ public class Grid<T> {
     }
 
     public void printWithDefault(String defaultString) {
+        PrintStream out = new PrintStream(System.out, false, StandardCharsets.UTF_8);
         for (T[] row : grid) {
             for (T field : row) {
                 if (field != null) {
-                    System.out.print(field);
+                    out.print(field);
                 } else {
-                    System.out.print(defaultString);
+                    out.print(defaultString);
                 }
             }
-            System.out.println();
+            out.println();
         }
     }
 }
