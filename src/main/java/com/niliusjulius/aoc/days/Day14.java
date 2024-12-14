@@ -16,8 +16,6 @@ public class Day14 {
 
     public static void main(String[] args) {
         List<String> input = Reader.readLinesAsList("day14");
-        Location[][] locations = new Location[WIDTH][HEIGHT];
-        Grid<Location> grid = new Grid<>(locations);
         List<Robot> robots = new ArrayList<>();
         for (String s : input) {
             String regex = "-*[0-9]+";
@@ -27,21 +25,13 @@ public class Day14 {
             while (matcher.find()) {
                 list.add(Integer.parseInt(matcher.group()));
             }
-            Coordinate location = new Coordinate(list.get(0), list.get(1));
-            Coordinate velocity = new Coordinate(list.get(2), list.get(3));
-            if (grid.get(location) != null) {
-                grid.get(location).robots.add(new Robot(location, velocity));
-            } else {
-                Location loc = new Location();
-                loc.robots.add(new Robot(location, velocity));
-                grid.set(location, loc);
-            }
+            Coordinate location = new Coordinate(list.get(1), list.get(0));
+            Coordinate velocity = new Coordinate(list.get(3), list.get(2));
             robots.add(new Robot(location, velocity));
         }
 
         System.out.println(part1(robots.stream().map(Robot::clone).toList()));
         System.out.println(part2(robots.stream().map(Robot::clone).toList()));
-//        System.out.println(part2Pretty(grid, robots.stream().map(Robot::clone).toList()));
     }
 
     private static int part1(List<Robot> robots) {
@@ -55,56 +45,44 @@ public class Day14 {
     }
 
     private static int part2(List<Robot> robots) {
-        int lowestSafety = 1000000000;
-        int lowestSafetyIndex = 0;
-        for (int i = 0; i < 10000; i++) {
-            for (Robot robot : robots) {
-                moveRobot(robot);
-            }
-            int safety = determineSafety(robots);
-            if (safety < lowestSafety) {
-                lowestSafety = safety;
-                lowestSafetyIndex = i;
-            }
-        }
-        return lowestSafetyIndex + 1;
-    }
-
-    private static int part2Pretty(Grid<Location> grid, List<Robot> robots) {
+        List<Grid<Location>> lowestSafetyGrids = new ArrayList<>();
         int lowestSafety = 1000000000;
         int lowestSafetyIndex = 0;
 
         for (int k = 0; k < 10000; k++) {
             for (Robot robot : robots) {
-                Location location = grid.get(robot.coordinate);
-                location.robots.remove(robot);
                 moveRobot(robot);
-                Location newLocation = grid.get(robot.coordinate);
-                if (newLocation != null) {
-                    newLocation.robots.add(robot);
-                } else {
-                    newLocation = new Location();
-                    newLocation.robots.add(robot);
-                    grid.set(robot.coordinate, newLocation);
-                }
             }
-
             int safety = determineSafety(robots);
             if (safety < lowestSafety) {
-                System.out.println(k+1);
-                grid.printWithDefault(".");
+                lowestSafetyGrids.add(makeGridFromRobots(robots));
                 lowestSafety = safety;
                 lowestSafetyIndex = k;
             }
         }
+        lowestSafetyGrids.getLast().printWithDefault(".");
+        return lowestSafetyIndex + 1;
+    }
 
-        return lowestSafetyIndex;
+    private static Grid<Location> makeGridFromRobots(List<Robot> robots) {
+        Location[][] locations = new Location[HEIGHT][WIDTH];
+        Grid<Location> grid = new Grid<>(locations);
+        for (Robot robot : robots) {
+            if (grid.get(robot.coordinate) != null) {
+                grid.get(robot.coordinate).robots.add(new Robot(robot.coordinate, robot.velocity));
+            } else {
+                Location loc = new Location();
+                loc.robots.add(new Robot(robot.coordinate, robot.velocity));
+                grid.set(robot.coordinate, loc);
+            }
+        }
+        return grid;
     }
 
     private static void moveRobot(Robot robot) {
         int newX = robot.coordinate.x + robot.velocity.x;
         int newY = robot.coordinate.y + robot.velocity.y;
-        robot.coordinate = new Coordinate(newX, newY).loopInBoundingBox(0, 0, WIDTH - 1, HEIGHT- 1);
+        robot.coordinate = new Coordinate(newX, newY).loopInBoundingBox(0, 0, HEIGHT - 1, WIDTH- 1);
     }
 
     private static int determineSafety(List<Robot> robots) {
@@ -112,8 +90,8 @@ public class Day14 {
         int q2 = 0;
         int q3 = 0;
         int q4 = 0;
-        int xDivider = (WIDTH-1) / 2;
-        int yDivider = (HEIGHT-1) / 2;
+        int xDivider = (HEIGHT-1) / 2;
+        int yDivider = (WIDTH-1) / 2;
         for (Robot robot : robots) {
             if (robot.coordinate.x < xDivider) {
                 if (robot.coordinate.y < yDivider) {
