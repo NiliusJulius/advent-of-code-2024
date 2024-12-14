@@ -38,7 +38,8 @@ public class App {
             exec(new DisplayData(10, "Hoof It", Day10::main));
             exec(new DisplayData(11, "Plutonian Pebbles", Day11::main));
             exec(new DisplayData(12, "Garden Groups", Day12::main));
-            exec(new DisplayData(13, "Garden Groups", Day13::main));
+            exec(new DisplayData(13, "Claw Contraption", Day13::main));
+            exec(new DisplayData(14, "Restroom Redoubt", Day14::main));
             Instant end = Instant.now();
             System.out.println("so far:\t" + Duration.between(start, end).toMillis() + " ms...");
         }

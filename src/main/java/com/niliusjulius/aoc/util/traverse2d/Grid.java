@@ -232,12 +232,16 @@ public class Grid<T> {
     }
 
     public void print() {
+        printWithDefault(" ");
+    }
+
+    public void printWithDefault(String defaultString) {
         for (T[] row : grid) {
             for (T field : row) {
                 if (field != null) {
                     System.out.print(field);
                 } else {
-                    System.out.print(" ");
+                    System.out.print(defaultString);
                 }
             }
             System.out.println();
