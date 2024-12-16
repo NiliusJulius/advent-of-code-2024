@@ -28,4 +28,30 @@ public enum Direction {
             case LEFT_UP -> UP;
         };
     }
+
+    public Direction turnLeft(Direction direction, boolean includeDiagonal) {
+        return switch (direction) {
+            case UP -> includeDiagonal ? LEFT_UP : LEFT;
+            case RIGHT -> includeDiagonal ? RIGHT_UP : UP;
+            case DOWN -> includeDiagonal ? RIGHT_DOWN : RIGHT;
+            case LEFT -> includeDiagonal ? LEFT_DOWN : DOWN;
+            case RIGHT_UP -> UP;
+            case RIGHT_DOWN -> RIGHT;
+            case LEFT_DOWN -> DOWN;
+            case LEFT_UP -> LEFT;
+        };
+    }
+
+    public Direction opposite() {
+        return switch (this) {
+            case UP -> DOWN;
+            case RIGHT -> LEFT;
+            case DOWN -> UP;
+            case LEFT -> RIGHT;
+            case RIGHT_UP -> LEFT_DOWN;
+            case RIGHT_DOWN -> LEFT_UP;
+            case LEFT_UP -> RIGHT_DOWN;
+            case LEFT_DOWN -> RIGHT_UP;
+        };
+    }
 }
