@@ -63,7 +63,7 @@ public class Day06 {
             if (!grid.get(nextPos).equals("#")) {
                 currentPos = nextPos;
             } else {
-                direction = direction.turnRight(direction, false);
+                direction = direction.turnRight(false);
             }
         }
         return visited;

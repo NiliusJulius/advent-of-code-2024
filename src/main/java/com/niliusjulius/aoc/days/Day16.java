@@ -71,9 +71,9 @@ public class Day16 {
         range(0,2).forEach(left -> {
             Direction previousDirection;
         if (left == 0) {
-            previousDirection = currentLocation.direction.turnLeft(currentLocation.direction, false);
+            previousDirection = currentLocation.direction.turnLeft(false);
         } else {
-            previousDirection = currentLocation.direction.turnRight(currentLocation.direction, false);
+            previousDirection = currentLocation.direction.turnRight(false);
         }
             VisitedLocation previousLocation = new VisitedLocation(currentLocation.location, previousDirection, 0);
             if (costMap.getOrDefault(previousLocation, Long.MAX_VALUE) == currentScore - 1000 && visitedLocations.add(previousLocation)) {
@@ -112,9 +112,9 @@ public class Day16 {
             VisitedLocation nextVisitedLocation = new VisitedLocation(nextLocation, currentLocation.direction, currentLocation.score + 1);
             queue.add(nextVisitedLocation);
         }
-        queue.add(new VisitedLocation(currentLocation.location, currentLocation.direction.turnLeft(currentLocation.direction, false),
+        queue.add(new VisitedLocation(currentLocation.location, currentLocation.direction.turnLeft(false),
                 currentLocation.score + 1000));
-        queue.add(new VisitedLocation(currentLocation.location, currentLocation.direction.turnRight(currentLocation.direction, false),
+        queue.add(new VisitedLocation(currentLocation.location, currentLocation.direction.turnRight(false),
                 currentLocation.score + 1000));
     }
 

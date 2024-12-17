@@ -16,8 +16,8 @@ public enum Direction {
         this.coordinate = coordinate;
     }
 
-    public Direction turnRight(Direction direction, boolean includeDiagonal) {
-        return switch (direction) {
+    public Direction turnRight(boolean includeDiagonal) {
+        return switch (this) {
             case UP -> includeDiagonal ? RIGHT_UP : RIGHT;
             case RIGHT -> includeDiagonal ? RIGHT_DOWN : DOWN;
             case DOWN -> includeDiagonal ? LEFT_DOWN : LEFT;
@@ -29,8 +29,8 @@ public enum Direction {
         };
     }
 
-    public Direction turnLeft(Direction direction, boolean includeDiagonal) {
-        return switch (direction) {
+    public Direction turnLeft(boolean includeDiagonal) {
+        return switch (this) {
             case UP -> includeDiagonal ? LEFT_UP : LEFT;
             case RIGHT -> includeDiagonal ? RIGHT_UP : UP;
             case DOWN -> includeDiagonal ? RIGHT_DOWN : RIGHT;
