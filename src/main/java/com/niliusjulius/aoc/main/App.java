@@ -45,6 +45,7 @@ public class App {
             exec(new DisplayData(15, "Warehouse Woes", Day15::main));
             exec(new DisplayData(16, "Reindeer Maze", Day16::main));
             exec(new DisplayData(17, "Chronospatial Computer", Day17::main));
+            exec(new DisplayData(18, "RAM Run", Day18::main));
             Instant end = Instant.now();
             System.out.println("so far:\t" + Duration.between(start, end).toMillis() + " ms...");
         }

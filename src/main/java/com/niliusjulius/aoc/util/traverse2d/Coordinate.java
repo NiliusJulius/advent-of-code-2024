@@ -43,4 +43,13 @@ public class Coordinate {
     public int hashCode() {
         return Objects.hash(this.x, this.y);
     }
+
+    @Override
+    public String toString() {
+        return x + "," + y;
+    }
+
+    public String toStringReverse() {
+        return y + "," + x;
+    }
 }

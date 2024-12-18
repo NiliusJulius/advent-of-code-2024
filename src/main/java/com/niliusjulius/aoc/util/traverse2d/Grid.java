@@ -2,8 +2,7 @@ package com.niliusjulius.aoc.util.traverse2d;
 
 import java.io.PrintStream;
 import java.nio.charset.StandardCharsets;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 import static com.niliusjulius.aoc.util.traverse2d.Direction.*;
 
@@ -38,7 +37,7 @@ public class Grid<T> {
         return grid[0].length; 
     }
 
-    public Coordinate indexOf(Object o) {
+    public Coordinate indexOf(T o) {
         if (o == null) {
             for (int i = 0; i < grid.length; i++) {
                 for (int j = 0; j < grid[i].length; j++) {
@@ -59,10 +58,10 @@ public class Grid<T> {
         return null;
     }
 
-    public Coordinate indexOf(Object... o) {
+    public Coordinate indexOf(T... o) {
         for (int i = 0; i < grid.length; i++) {
             for (int j = 0; j < grid[i].length; j++) {
-                for (Object obj : o) {
+                for (T obj : o) {
                     if (obj.equals(grid[i][j])) {
                         return new Coordinate(i, j);
                     }
@@ -72,7 +71,7 @@ public class Grid<T> {
         return null;
     }
 
-    public List<Coordinate> findAll(Object o) {
+    public List<Coordinate> findAll(T o) {
         List<Coordinate> result = new ArrayList<>();
         for (int i = 0; i < grid.length; i++) {
             for (int j = 0; j < grid[i].length; j++) {
@@ -84,7 +83,7 @@ public class Grid<T> {
         return result;
     }
 
-    public List<Coordinate> findAdjacent(Coordinate coordinate, Object o) {
+    public List<Coordinate> findAdjacent(Coordinate coordinate, T o) {
         List<Coordinate> result = new ArrayList<>();
         Coordinate nextCoordinate = coordinate.nextCoordinate(UP);
         if (withinGrid(nextCoordinate)
@@ -109,7 +108,7 @@ public class Grid<T> {
         return result;
     }
 
-    public List<Coordinate> findNotAdjacent(Coordinate coordinate, Object o) {
+    public List<Coordinate> findNotAdjacent(Coordinate coordinate, T o) {
         List<Coordinate> result = new ArrayList<>();
         Coordinate nextCoordinate = coordinate.nextCoordinate(UP);
         if (!withinGrid(nextCoordinate)
@@ -134,14 +133,14 @@ public class Grid<T> {
         return result;
     }
 
-    public List<Coordinate> findRegionAt(Coordinate coordinate, Object o) {
+    public List<Coordinate> findRegionAt(Coordinate coordinate, T o) {
         List<Coordinate> result = new ArrayList<>();
         result.add(coordinate);
         findRegionAt(coordinate, o, result);
         return result;
     }
 
-    private void findRegionAt(Coordinate coordinate, Object o, List<Coordinate> visited) {
+    private void findRegionAt(Coordinate coordinate, T o, List<Coordinate> visited) {
         List<Coordinate> adjacentSameValue = findAdjacent(coordinate, o);
         for (Coordinate adjacent : adjacentSameValue) {
             if (!visited.contains(adjacent)) {
@@ -248,6 +247,39 @@ public class Grid<T> {
                 }
             }
             out.println();
+        }
+    }
+
+    public Integer findCheapestPath(Coordinate start, Coordinate end, List<T> allowed) {
+        PriorityQueue<Point<Coordinate, Integer>> queue = new PriorityQueue<>(Comparator.comparingLong(Point::value));
+        queue.add(new Point<>(start, 0));
+
+        Map<Point<Coordinate, Integer>, Integer> costMap = new HashMap<>();
+        while (!queue.isEmpty()) {
+            Point<Coordinate, Integer> currentPoint = queue.poll();
+            if (currentPoint.coordinate().equals(end)) {
+                return currentPoint.value();
+            }
+            findNextPathLocation(costMap, queue, currentPoint, allowed);
+        }
+        return null;
+    }
+
+    private void findNextPathLocation(Map<Point<Coordinate, Integer>, Integer> costMap,
+                                      PriorityQueue<Point<Coordinate, Integer>> queue,
+                                      Point<Coordinate, Integer> currentPoint,
+                                      List<T> allowed) {
+        if (costMap.getOrDefault(currentPoint, Integer.MAX_VALUE) <= currentPoint.value()) {
+            return;
+        }
+        costMap.put(currentPoint, currentPoint.value());
+
+        Set<Coordinate> nextLocations = new HashSet<>();
+        for (T field : allowed) {
+            nextLocations.addAll(findAdjacent(currentPoint.coordinate(), field));
+        }
+        for (Coordinate next : nextLocations) {
+            queue.add(new Point<>(next, currentPoint.value() + 1));
         }
     }
 }
