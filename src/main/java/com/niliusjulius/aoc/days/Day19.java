@@ -13,9 +13,7 @@ public class Day19 {
         for (int i = 0; i < input.size(); i++) {
             if (i == 0) {
                 towels = Arrays.stream(input.get(i).split(", ")).toList();
-            } else if (i == 1) {
-                // do nothing
-            } else {
+            } else if ( i >= 2) {
                 patterns.add(input.get(i));
             }
         }
@@ -24,53 +22,40 @@ public class Day19 {
         System.out.println(part2(towels, patterns));
     }
 
-    private static int part1(List<String> towels, List<String> patterns) {
-        int possibleCount = 0;
-        Set<String> impossiblePatterns;
+    private static long part1(List<String> towels, List<String> patterns) {
+        long possibleCount = 0;
         for (String pattern : patterns) {
-            impossiblePatterns = new HashSet<>();
-            int ways = canMakePattern(towels, pattern, 0, impossiblePatterns);
-            if (ways > 0) {
+            if (countPatternOptions(towels, pattern) > 0) {
                 possibleCount++;
             }
         }
-
         return possibleCount;
     }
 
     private static long part2(List<String> towels, List<String> patterns) {
         long possibleCount = 0;
-        Set<String> impossiblePatterns;
         for (String pattern : patterns) {
-            impossiblePatterns = new HashSet<>();
-            int ways = canMakePattern(towels, pattern, 0, impossiblePatterns);
-            possibleCount += ways;
+            possibleCount += countPatternOptions(towels, pattern);
         }
-
         return possibleCount;
     }
 
-    private static int canMakePattern(List<String> towels, String pattern, int index, Set<String> impossiblePatterns) {
-        int ways = 0;
-        String patternSub = pattern.substring(index);
-        if (impossiblePatterns.contains(patternSub)) {
-            return 0;
-        }
-        for (String towel : towels) {
-            if (patternSub.startsWith(towel)) {
-                if (pattern.length() == index + towel.length()) {
-                    ways++;
-                } else {
-                    int howManyWays = canMakePattern(towels, pattern, index + towel.length(), impossiblePatterns);
-                    if (howManyWays > 0) {
-                        ways += howManyWays;
-                    } else {
-                        impossiblePatterns.add(patternSub);
+    private static long countPatternOptions(List<String> towels, String pattern) {
+        Map<Integer, Long> patternWays = new HashMap<>(Map.of(0, 1L));
+        for (int i = 0; i < pattern.length(); i++) {
+            for (String towel : towels) {
+                int subStringEnd = i + towel.length();
+                if (subStringEnd <= pattern.length() && pattern.startsWith(towel, i)) {
+                    if (!patternWays.containsKey(i)) {
+                        patternWays.put(i, 0L);
                     }
+                    patternWays.put(subStringEnd, patternWays.containsKey(subStringEnd)
+                            ? patternWays.get(subStringEnd) + patternWays.get(i)
+                            : patternWays.get(i));
                 }
             }
         }
-        return ways;
+        return patternWays.getOrDefault(pattern.length(), 0L);
     }
 }
 
