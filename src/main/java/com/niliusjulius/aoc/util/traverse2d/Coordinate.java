@@ -33,6 +33,10 @@ public class Coordinate {
         return new Coordinate(x, y);
     }
 
+    public int distance(Coordinate coordinate) {
+        return Math.abs(x - coordinate.x) + Math.abs(y - coordinate.y);
+    }
+
     @Override
     public boolean equals(Object o) {
         if (!(o instanceof Coordinate)) return false;

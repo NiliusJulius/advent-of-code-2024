@@ -47,6 +47,7 @@ public class App {
             exec(new DisplayData(17, "Chronospatial Computer", Day17::main));
             exec(new DisplayData(18, "RAM Run", Day18::main));
             exec(new DisplayData(19, "Linen Layout", Day19::main));
+            exec(new DisplayData(20, "Race Condition", Day20::main));
             Instant end = Instant.now();
             System.out.println("so far:\t" + Duration.between(start, end).toMillis() + " ms...");
         }
