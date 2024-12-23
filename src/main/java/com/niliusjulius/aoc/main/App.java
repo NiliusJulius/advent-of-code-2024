@@ -50,6 +50,7 @@ public class App {
             exec(new DisplayData(20, "Race Condition", Day20::main));
             exec(new DisplayData(21, "Keypad Conundrum", Day21::main));
             exec(new DisplayData(22, "Monkey Market", Day22::main));
+            exec(new DisplayData(23, "LAN Party", Day23::main));
             Instant end = Instant.now();
             System.out.println("so far:\t" + Duration.between(start, end).toMillis() + " ms...");
         }
